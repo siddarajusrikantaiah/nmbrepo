@@ -37,6 +37,7 @@ public class NMBGCSUpload implements EntryPoint {
 //		rootPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		DecoratorPanel decoratorPanel = new DecoratorPanel();
+		
 //		rootPanel.add(decoratorPanel, 279, 224);
 		
 		System.out.println("rootPanel.getOffsetWidth()/2   "+rootPanel.getAbsoluteLeft());
