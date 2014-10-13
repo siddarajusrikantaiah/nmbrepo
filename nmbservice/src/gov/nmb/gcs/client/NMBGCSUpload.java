@@ -1,7 +1,5 @@
 package gov.nmb.gcs.client;
 
-import gov.nmb.config.ConfigUtil;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,7 +23,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class NMBGCSUpload implements EntryPoint {
 	final FormPanel form = new FormPanel();
 
-	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL()+ ConfigUtil.getProperty("UPLOAD_ACTION_PATH");
+	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL()+"upload";
 	TextBox targetTextBox;
 
 	public void onModuleLoad() {

@@ -3,10 +3,10 @@ package gov.nmb.config;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 
-import com.google.gwt.dev.util.collect.HashMap;
 
 public class ConfigUtil {
 	private static Map<String, String> configMap = new HashMap<String, String>();
@@ -31,7 +31,7 @@ public class ConfigUtil {
 				configMap.put(Key, (String)Val);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error in loading Properties ===================  "+e.getMessage());
 			e.printStackTrace();
 		}
 	}
