@@ -1,5 +1,6 @@
 package gov.nmb.gcs.server;
 
+import gov.nmb.config.ConfigUtil;
 import gov.nmb.gdrive.server.DriveImpl;
 
 import java.io.IOException;
@@ -26,8 +27,8 @@ import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 public class NMBGCSUploadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	public static final String BUCKETNAME = "os-testwidgetapp.appspot.com";
-	private static final String OWNER_USER_NAME = "siddaraju@openosmium.com";
+	public static final String BUCKETNAME = ConfigUtil.getProperty("BUCKETNAME");
+	private static final String OWNER_USER_NAME = ConfigUtil.getProperty("OWNER_USER_NAME");
 	private DriveImpl driveImpl = null;
 
 	@Override

@@ -1,5 +1,7 @@
 package gov.nmb.oauth.server;
 
+import gov.nmb.config.ConfigUtil;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
@@ -15,10 +17,10 @@ import com.google.api.services.drive.DriveScopes;
 
 public class ServiceAuth {
 	/** Email of the Service Account */
-	private static final String SERVICE_ACCOUNT_EMAIL = "995412434952-qocmadui1vhbsim4iqgkc3ec1ts204t9@developer.gserviceaccount.com";
+	private static final String SERVICE_ACCOUNT_EMAIL = ConfigUtil.getProperty("SERVICE_ACCOUNT_EMAIL");
 
 	/** Path to the Service Account's Private Key file */
-	private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = "os-testwidgetapp-a804834b6028.p12";
+	private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH =ConfigUtil.getProperty("SERVICE_ACCOUNT_PKCS12_FILE_PATH");
 
 	public static Drive getDriveService(String userEmail) throws GeneralSecurityException,IOException, URISyntaxException {
 		HttpTransport httpTransport = new NetHttpTransport();
