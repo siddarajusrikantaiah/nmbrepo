@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -27,6 +26,8 @@ public class NMBGCSUpload implements EntryPoint {
 	TextBox targetTextBox;
 
 	public void onModuleLoad() {
+		
+		
 
 		RootPanel rootPanel = RootPanel.get();
 		
@@ -79,7 +80,7 @@ public class NMBGCSUpload implements EntryPoint {
 								panel.setCellHorizontalAlignment(flowPanel, HasHorizontalAlignment.ALIGN_CENTER);
 								flowPanel.setHeight("44px");
 								
-								Label lblNewLabel = new Label("User Email");
+/*								Label lblNewLabel = new Label("User Email");
 								flowPanel.add(lblNewLabel);
 								flowPanel.setCellVerticalAlignment(lblNewLabel, HasVerticalAlignment.ALIGN_MIDDLE);
 								lblNewLabel.setSize("68px", "18px");
@@ -88,7 +89,7 @@ public class NMBGCSUpload implements EntryPoint {
 								textBox.setName("userEmail");
 								flowPanel.add(textBox);
 								textBox.setWidth("177px");
-								flowPanel.setCellVerticalAlignment(textBox, HasVerticalAlignment.ALIGN_MIDDLE);
+								flowPanel.setCellVerticalAlignment(textBox, HasVerticalAlignment.ALIGN_MIDDLE);*/
 								
 								HorizontalPanel horizontalPanel = new HorizontalPanel();
 								panel.add(horizontalPanel);
@@ -150,6 +151,11 @@ public class NMBGCSUpload implements EntryPoint {
 			form.reset();
 //			 System.out.println("Event Result is   "+event.getResults());
 			 Window.alert(event.getResults());
+			System.out.println("Redirecting ===================================  " +event.getResults());
+			
+			 Window.Location.replace("/index.jsp");
+			 
 		}
 	}
+		
 }

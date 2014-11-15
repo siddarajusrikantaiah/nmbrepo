@@ -1,0 +1,76 @@
+package gov.nmb.gcs.server;
+
+import gov.nmb.config.ConfigUtil;
+import gov.nmb.gcstore.server.CloudStorageImpl;
+import gov.nmb.oauth.server.ServiceAuth;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.ListMessagesResponse;
+import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
+import com.google.api.services.gmail.model.MessagePartBody;
+
+public class GMailAttachmentServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+	private CloudStorageImpl cloudStorageImpl= null;
+	private static final String EMAIL_USER = ConfigUtil.getProperty("EMAIL_USER");
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.getOutputStream().write("In Get".getBytes());
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)	throws ServletException, IOException {
+		Gmail service = null;
+		try {
+			service = ServiceAuth.getGMailService(EMAIL_USER);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		ListMessagesResponse messagesResponse = service.users().messages().list(EMAIL_USER).execute();
+		List<Message> messages = messagesResponse.getMessages();
+		
+		for (Message message : messages) {
+			getAttachments(service,EMAIL_USER,message.getId());			
+		}
+		
+		resp.setContentType("text/plain");
+		resp.getWriter().println("Success ");
+	}
+	public void getAttachments(Gmail service, String userId, String messageId) throws IOException {
+		System.out.println("Inside attachemnt =========== ");    
+		Message message = service.users().messages().get(userId, messageId).execute();
+		    List<MessagePart> parts = message.getPayload().getParts();
+		    if(parts!=null){
+		    for (MessagePart part : parts) {
+		      if (part.getFilename() != null && part.getFilename().length() > 0) {
+		        String filename = part.getFilename();
+		        String contentType = part.getMimeType();
+		        String attId = part.getBody().getAttachmentId();
+		        MessagePartBody attachPart = service.users().messages().attachments().get(userId, messageId, attId).execute();
+		        byte[] fileByteArray = Base64.decodeBase64(attachPart.getData());
+		        uploadToCloudStorage(fileByteArray, userId, filename, contentType);
+		      }
+		    }
+		    }
+		  }
+	
+	
+	  private boolean uploadToCloudStorage(byte[] bytes, String user, String fileName, String contentType){
+		  cloudStorageImpl = new CloudStorageImpl();
+		  return  cloudStorageImpl.uploadToBucket(bytes, user, fileName, contentType);
+
+	  }
+  
+}
