@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/service/uploadgmailattachments</url>
+    <description>Periodically Upload Gmail attachments to Cloud storage</description>
+    <schedule>every 5 minutes</schedule>
+    <timezone>America/New_York</timezone>
+  </cron>
+</cronentries>

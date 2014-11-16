@@ -30,7 +30,8 @@ public class GMailAttachmentServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		resp.getOutputStream().write("In Get".getBytes());
+		doPost(req, resp);
+//		resp.getOutputStream().write("In Get".getBytes());
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)	throws ServletException, IOException {
