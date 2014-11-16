@@ -25,7 +25,7 @@ public class CloudStorageImpl {
 			String fileName = item.getName();
 			  
 		    GcsService gcsService = GcsServiceFactory.createGcsService();
-		    GcsFilename filename = new GcsFilename(BUCKETNAME, fileName);
+		    GcsFilename filename = new GcsFilename(BUCKETNAME, "DirectUpload/"+fileName);
 		    GcsFileOptions options = new GcsFileOptions.Builder()
 		        								.mimeType(item.getContentType())
 		        								.acl("public-read")
@@ -43,17 +43,21 @@ public class CloudStorageImpl {
 		  return true;
 	  }
 	 
-	 public boolean uploadToBucket(byte[] bytes, String user, String fileName, String contentType){
+	 public boolean uploadToBucket(byte[] bytes, String user, String fileName, String contentType, String date, String from, String subject,String messageId){
 		  try{
  
 		    GcsService gcsService = GcsServiceFactory.createGcsService();
-		    GcsFilename filename = new GcsFilename(BUCKETNAME, fileName);
+		    GcsFilename filename = new GcsFilename(BUCKETNAME, from+"/"+fileName);
 		    GcsFileOptions options = new GcsFileOptions.Builder()
 		        								.mimeType(contentType)
 		        								.acl("public-read")
 		        								.addUserMetadata("userUploaded", user)
 		        								.addUserMetadata("FileName", fileName)
 		        								.addUserMetadata("ContentType", contentType)
+		        								.addUserMetadata("date", date)
+		        								.addUserMetadata("from", from)
+		        								.addUserMetadata("subject", subject)
+		        								.addUserMetadata("messageId", messageId)
 		        								.build();
 		    GcsOutputChannel writeChannel = gcsService.createOrReplace(filename, options);
 		    writeChannel.write(ByteBuffer.wrap(bytes));

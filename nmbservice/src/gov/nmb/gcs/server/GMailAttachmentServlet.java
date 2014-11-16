@@ -18,6 +18,7 @@ import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import com.google.api.services.gmail.model.MessagePartBody;
+import com.google.api.services.gmail.model.MessagePartHeader;
 
 public class GMailAttachmentServlet extends HttpServlet {
 
@@ -33,12 +34,13 @@ public class GMailAttachmentServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)	throws ServletException, IOException {
 		Gmail service = null;
+		String days = "20";
 		try {
 			service = ServiceAuth.getGMailService(EMAIL_USER);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		ListMessagesResponse messagesResponse = service.users().messages().list(EMAIL_USER).execute();
+		ListMessagesResponse messagesResponse = service.users().messages().list(EMAIL_USER).setQ("has:attachment newer_than:"+days+"d").execute();
 		List<Message> messages = messagesResponse.getMessages();
 		
 		for (Message message : messages) {
@@ -52,6 +54,7 @@ public class GMailAttachmentServlet extends HttpServlet {
 		System.out.println("Inside attachemnt =========== ");    
 		Message message = service.users().messages().get(userId, messageId).execute();
 		    List<MessagePart> parts = message.getPayload().getParts();
+		    
 		    if(parts!=null){
 		    for (MessagePart part : parts) {
 		      if (part.getFilename() != null && part.getFilename().length() > 0) {
@@ -60,16 +63,34 @@ public class GMailAttachmentServlet extends HttpServlet {
 		        String attId = part.getBody().getAttachmentId();
 		        MessagePartBody attachPart = service.users().messages().attachments().get(userId, messageId, attId).execute();
 		        byte[] fileByteArray = Base64.decodeBase64(attachPart.getData());
-		        uploadToCloudStorage(fileByteArray, userId, filename, contentType);
+		        
+		        List<MessagePartHeader> headers = message.getPayload().getHeaders();
+		        String subject = "";
+		        String date = "";
+		        String from = "";
+		       
+			    for (MessagePartHeader messagePartHeader : headers) {
+			    	if(messagePartHeader.getName().equalsIgnoreCase("Subject")){
+			    		subject = messagePartHeader.getValue();
+			    	}				    	
+			    	if(messagePartHeader.getName().equalsIgnoreCase("From")){
+			    		from = messagePartHeader.getValue();
+			    	}				    		
+		    		if(messagePartHeader.getName().equalsIgnoreCase("Date")){
+		    			date = messagePartHeader.getValue();
+		    		}
+				}		        
+		        
+		        uploadToCloudStorage(fileByteArray, userId, filename, contentType, date, from, subject, messageId);
 		      }
 		    }
 		    }
 		  }
 	
 	
-	  private boolean uploadToCloudStorage(byte[] bytes, String user, String fileName, String contentType){
+	  private boolean uploadToCloudStorage(byte[] bytes, String user, String fileName, String contentType, String date, String from, String subject,String messageId){
 		  cloudStorageImpl = new CloudStorageImpl();
-		  return  cloudStorageImpl.uploadToBucket(bytes, user, fileName, contentType);
+		  return  cloudStorageImpl.uploadToBucket(bytes, user, fileName, contentType, date, from, subject, messageId);
 
 	  }
   
