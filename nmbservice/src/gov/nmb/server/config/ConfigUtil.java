@@ -1,4 +1,4 @@
-package gov.nmb.config;
+package gov.nmb.server.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;

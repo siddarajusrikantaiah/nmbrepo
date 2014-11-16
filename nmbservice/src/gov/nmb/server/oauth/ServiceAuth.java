@@ -1,6 +1,6 @@
-package gov.nmb.oauth.server;
+package gov.nmb.server.oauth;
 
-import gov.nmb.config.ConfigUtil;
+import gov.nmb.server.config.ConfigUtil;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

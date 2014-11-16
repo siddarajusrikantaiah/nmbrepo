@@ -1,4 +1,4 @@
-package gov.nmb.dataservice.server;
+package gov.nmb.server.dataservice;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;

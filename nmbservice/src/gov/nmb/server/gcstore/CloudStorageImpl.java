@@ -1,6 +1,6 @@
-package gov.nmb.gcstore.server;
+package gov.nmb.server.gcstore;
 
-import gov.nmb.config.ConfigUtil;
+import gov.nmb.server.config.ConfigUtil;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;

@@ -1,7 +1,7 @@
-package gov.nmb.gdrive.server;
+package gov.nmb.server.gdrive;
 
-import gov.nmb.config.ConfigUtil;
-import gov.nmb.oauth.server.ServiceAuth;
+import gov.nmb.server.config.ConfigUtil;
+import gov.nmb.server.oauth.ServiceAuth;
 
 import java.io.IOException;
 import java.io.InputStream;

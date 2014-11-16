@@ -1,6 +1,6 @@
 package gov.nmb.gcs.server;
 
-import gov.nmb.gdrive.server.DriveImpl;
+import gov.nmb.server.gdrive.DriveImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;

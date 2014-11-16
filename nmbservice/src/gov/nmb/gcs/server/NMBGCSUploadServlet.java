@@ -1,7 +1,7 @@
 package gov.nmb.gcs.server;
 
-import gov.nmb.gcstore.server.CloudStorageImpl;
-import gov.nmb.gdrive.server.DriveImpl;
+import gov.nmb.server.gcstore.CloudStorageImpl;
+import gov.nmb.server.gdrive.DriveImpl;
 
 import java.io.IOException;
 import java.io.InputStream;

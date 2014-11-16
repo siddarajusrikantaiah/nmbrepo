@@ -1,9 +1,9 @@
 package gov.nmb.gcs.server;
 
-import gov.nmb.config.ConfigUtil;
-import gov.nmb.dataservice.server.NBMDataServiceImpl;
-import gov.nmb.gcstore.server.CloudStorageImpl;
-import gov.nmb.oauth.server.ServiceAuth;
+import gov.nmb.server.config.ConfigUtil;
+import gov.nmb.server.dataservice.NBMDataServiceImpl;
+import gov.nmb.server.gcstore.CloudStorageImpl;
+import gov.nmb.server.oauth.ServiceAuth;
 
 import java.io.IOException;
 import java.util.List;
