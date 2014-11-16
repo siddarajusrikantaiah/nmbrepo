@@ -1,6 +1,7 @@
 package gov.nmb.gcs.server;
 
 import gov.nmb.config.ConfigUtil;
+import gov.nmb.dataservice.server.NBMDataServiceImpl;
 import gov.nmb.gcstore.server.CloudStorageImpl;
 import gov.nmb.oauth.server.ServiceAuth;
 
@@ -34,24 +35,29 @@ public class GMailAttachmentServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)	throws ServletException, IOException {
 		Gmail service = null;
-		String days = "20";
+		String days = NBMDataServiceImpl.getNoOfDaysToSearch();	
 		try {
 			service = ServiceAuth.getGMailService(EMAIL_USER);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
 		ListMessagesResponse messagesResponse = service.users().messages().list(EMAIL_USER).setQ("has:attachment newer_than:"+days+"d").execute();
-		List<Message> messages = messagesResponse.getMessages();
-		
-		for (Message message : messages) {
-			getAttachments(service,EMAIL_USER,message.getId());			
+		if (messagesResponse.getResultSizeEstimate() > 0) {
+			List<Message> messages = messagesResponse.getMessages();
+			String lastMessageId = NBMDataServiceImpl.getLastMessageId();
+			int messageCounter = 0;
+			for (Message message : messages) {
+				if (message.getId().equals(lastMessageId)) {
+					break;
+				}
+				getAttachments(service, EMAIL_USER, message.getId(),messageCounter);
+				messageCounter++;
+			}
 		}
-		
 		resp.setContentType("text/plain");
 		resp.getWriter().println("Success ");
 	}
-	public void getAttachments(Gmail service, String userId, String messageId) throws IOException {
-		System.out.println("Inside attachemnt =========== ");    
+	public void getAttachments(Gmail service, String userId, String messageId, int messageCounter) throws IOException {
 		Message message = service.users().messages().get(userId, messageId).execute();
 		    List<MessagePart> parts = message.getPayload().getParts();
 		    
@@ -82,6 +88,9 @@ public class GMailAttachmentServlet extends HttpServlet {
 				}		        
 		        
 		        uploadToCloudStorage(fileByteArray, userId, filename, contentType, date, from, subject, messageId);
+		        if(messageCounter==0){
+		        	NBMDataServiceImpl.storeLatestMessage(messageId, from, date, subject);
+		        }
 		      }
 		    }
 		    }
